@@ -22,6 +22,8 @@ enum Tile : uint8_t
     max_tile
 };
 
+std::ostream &operator<<(std::ostream &out, Tile tile);
+
 namespace Settings
 {
     inline constexpr int ROW_SIZE{8};
@@ -56,13 +58,21 @@ namespace Rendering
         friend std::ostream &operator<<(std::ostream &out, const TileDisplay &tile);
     };
 
+    inline constexpr std::array HORIZONTAL_AXIS_CHAR{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    inline constexpr std::array VERTICAL_AXIS_CHAR{'1', '2', '3', '4', '5', '6', '7', '8'};
+    static_assert(std::ssize(HORIZONTAL_AXIS_CHAR) == Settings::ROW_SIZE);
+    static_assert(std::ssize(VERTICAL_AXIS_CHAR) == Settings::ROW_SIZE);
+
+    inline constexpr std::string_view HORIZONTAL_LINE{"  ------------------------"};
+    inline constexpr std::string_view VERTICAL_LINE{"|"};
+
     // Console ANSI display colors
     inline constexpr std::string_view BLACK_TILE_ANSI_COLOR{"\033[33m"};
     inline constexpr std::string_view WHITE_TILE_ANSI_COLOR{"\033[34m"};
     inline constexpr std::string_view DEFAULT_ANSI_COLOR{"\033[0m"};
 
     inline constexpr std::array TILE_DISPLAY_VALUE{
-        TileDisplay{DEFAULT_ANSI_COLOR, " "},
+        TileDisplay{DEFAULT_ANSI_COLOR, "."},
         TileDisplay{BLACK_TILE_ANSI_COLOR, "P"},
         TileDisplay{BLACK_TILE_ANSI_COLOR, "R"},
         TileDisplay{BLACK_TILE_ANSI_COLOR, "B"},
