@@ -9,6 +9,11 @@ add_executable(chess_engine
     src/main.cpp
     src/board.cpp
     src/board.h
+    src/move.h
+    src/move.cpp
+    src/chess_constants.h
+    src/input_utils.h
+    src/input_utils.cpp
 )
 
 target_include_directories(chess_engine PRIVATE

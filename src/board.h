@@ -1,4 +1,8 @@
+#pragma once
+#include "chess_constants.h"
+#include "move.h"
 #include <iostream>
+#include <assert.h>
 #include <array>
 
 enum Tile : uint8_t
@@ -24,13 +28,7 @@ enum Tile : uint8_t
 
 std::ostream &operator<<(std::ostream &out, Tile tile);
 
-namespace Settings
-{
-    inline constexpr int ROW_SIZE{8};
-    inline constexpr int BOARD_SIZE{ROW_SIZE * ROW_SIZE};
-};
-
-using BoardType = std::array<Tile, Settings::BOARD_SIZE>;
+using BoardType = std::array<Tile, Chess::BoardSize>;
 
 namespace Settings
 {
@@ -49,6 +47,8 @@ namespace Settings
 
 namespace Rendering
 {
+    void clearScreen();
+
     // Diplay information for each tile
     struct TileDisplay
     {
@@ -58,35 +58,35 @@ namespace Rendering
         friend std::ostream &operator<<(std::ostream &out, const TileDisplay &tile);
     };
 
-    inline constexpr std::array HORIZONTAL_AXIS_CHAR{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
-    inline constexpr std::array VERTICAL_AXIS_CHAR{'1', '2', '3', '4', '5', '6', '7', '8'};
-    static_assert(std::ssize(HORIZONTAL_AXIS_CHAR) == Settings::ROW_SIZE);
-    static_assert(std::ssize(VERTICAL_AXIS_CHAR) == Settings::ROW_SIZE);
+    inline constexpr std::array horizontalAxisChar{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+    inline constexpr std::array verticalAxisChar{'1', '2', '3', '4', '5', '6', '7', '8'};
+    static_assert(std::ssize(horizontalAxisChar) == Chess::RowSize);
+    static_assert(std::ssize(verticalAxisChar) == Chess::RowSize);
 
-    inline constexpr std::string_view HORIZONTAL_LINE{"  ------------------------"};
-    inline constexpr std::string_view VERTICAL_LINE{"|"};
+    inline constexpr std::string_view horizontalLine{"  ------------------------"};
+    inline constexpr std::string_view verticalLine{"|"};
 
     // Console ANSI display colors
-    inline constexpr std::string_view BLACK_TILE_ANSI_COLOR{"\033[33m"};
-    inline constexpr std::string_view WHITE_TILE_ANSI_COLOR{"\033[34m"};
-    inline constexpr std::string_view DEFAULT_ANSI_COLOR{"\033[0m"};
+    inline constexpr std::string_view blackTileANSIColor{"\033[33m"};
+    inline constexpr std::string_view whiteTileANSIColor{"\033[34m"};
+    inline constexpr std::string_view defaultANSIColor{"\033[0m"};
 
-    inline constexpr std::array TILE_DISPLAY_VALUE{
-        TileDisplay{DEFAULT_ANSI_COLOR, "."},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "P"},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "R"},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "B"},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "N"},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "K"},
-        TileDisplay{BLACK_TILE_ANSI_COLOR, "Q"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "P"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "R"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "B"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "N"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "K"},
-        TileDisplay{WHITE_TILE_ANSI_COLOR, "Q"},
+    inline constexpr std::array tileDisplayValue{
+        TileDisplay{defaultANSIColor, "."},
+        TileDisplay{blackTileANSIColor, "P"},
+        TileDisplay{blackTileANSIColor, "R"},
+        TileDisplay{blackTileANSIColor, "B"},
+        TileDisplay{blackTileANSIColor, "N"},
+        TileDisplay{blackTileANSIColor, "K"},
+        TileDisplay{blackTileANSIColor, "Q"},
+        TileDisplay{whiteTileANSIColor, "P"},
+        TileDisplay{whiteTileANSIColor, "R"},
+        TileDisplay{whiteTileANSIColor, "B"},
+        TileDisplay{whiteTileANSIColor, "N"},
+        TileDisplay{whiteTileANSIColor, "K"},
+        TileDisplay{whiteTileANSIColor, "Q"},
     };
-    static_assert(std::ssize(TILE_DISPLAY_VALUE) == Tile::max_tile);
+    static_assert(std::ssize(tileDisplayValue) == Tile::max_tile);
 };
 
 class Board
@@ -97,4 +97,8 @@ public:
     Board(BoardType board) : m_board{board} {}
 
     friend std::ostream &operator<<(std::ostream &out, const Board &board);
+
+    Tile getTile(Coordinate coordinate) const;
+    void setTile(Coordinate coordinate, Tile tile);
+    void movePiece(const Move &move);
 };

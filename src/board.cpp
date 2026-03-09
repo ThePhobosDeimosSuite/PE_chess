@@ -4,31 +4,36 @@
 
 namespace Rendering
 {
+    void clearScreen()
+    {
+        std::cout << "\x1B[2J\x1B[H";
+    }
+
     std::ostream &operator<<(std::ostream &out, const Rendering::TileDisplay &tile)
     {
-        out << tile.color << tile.icon << Rendering::DEFAULT_ANSI_COLOR;
+        out << tile.color << tile.icon << Rendering::defaultANSIColor;
         return out;
     }
 }
 
 std::ostream &operator<<(std::ostream &out, Tile tile)
 {
-    out << Rendering::TILE_DISPLAY_VALUE[tile];
+    out << Rendering::tileDisplayValue[tile];
     return out;
 }
 
 void printHorizontalAxis(std::ostream &out)
 {
     out << "  ";
-    for (int i{0}; i < std::ssize(Rendering::HORIZONTAL_AXIS_CHAR); i++)
+    for (int i{0}; i < std::ssize(Rendering::horizontalAxisChar); i++)
     {
-        out << " " << Rendering::HORIZONTAL_AXIS_CHAR[i] << " ";
+        out << " " << Rendering::horizontalAxisChar[i] << " ";
     }
 }
 
 void printHorizontalLine(std::ostream &out)
 {
-    out << Rendering::HORIZONTAL_LINE;
+    out << Rendering::horizontalLine;
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &board)
@@ -38,29 +43,29 @@ std::ostream &operator<<(std::ostream &out, const Board &board)
     printHorizontalLine(out);
     out << '\n';
 
-    for (int i{0}; i < Settings::BOARD_SIZE; i++)
+    for (int i{0}; i < Chess::BoardSize; i++)
     {
-        if (i % Settings::ROW_SIZE == 0)
+        if (i % Chess::RowSize == 0)
         {
             if (i != 0)
             {
-                out << Rendering::VERTICAL_LINE;
+                out << Rendering::verticalLine;
                 // this will implicit cast correctly right?
-                out << Rendering::VERTICAL_AXIS_CHAR[i / Settings::ROW_SIZE - 1];
+                out << Rendering::verticalAxisChar[i / Chess::RowSize - 1];
 
                 out << '\n';
             }
 
-            out << Rendering::VERTICAL_AXIS_CHAR[i / Settings::ROW_SIZE];
-            out << Rendering::VERTICAL_LINE;
+            out << Rendering::verticalAxisChar[i / Chess::RowSize];
+            out << Rendering::verticalLine;
         }
 
         // printing space instead of setw() because setw() doesn't work with the color concat when printing Tile
         out << " " << board.m_board[i] << " ";
     }
 
-    out << Rendering::VERTICAL_LINE;
-    out << Rendering::VERTICAL_AXIS_CHAR[Settings::ROW_SIZE - 1];
+    out << Rendering::verticalLine;
+    out << Rendering::verticalAxisChar[Chess::RowSize - 1];
 
     out << '\n';
     printHorizontalLine(out);
@@ -68,4 +73,21 @@ std::ostream &operator<<(std::ostream &out, const Board &board)
     printHorizontalAxis(out);
 
     return out;
+}
+
+Tile Board::getTile(Coordinate coordinate) const
+{
+    return m_board[coordinate.y * Chess::RowSize + coordinate.x];
+}
+
+void Board::setTile(Coordinate coordinate, Tile tile)
+{
+    m_board[coordinate.y * Chess::RowSize + coordinate.x] = tile;
+}
+
+void Board::movePiece(const Move &move)
+{
+    auto originTile{this->getTile(move.getOrigin())};
+    setTile(move.getDestination(), originTile);
+    setTile(move.getOrigin(), Tile::Empty);
 }
