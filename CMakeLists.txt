@@ -10,10 +10,12 @@ add_executable(chess_engine
     src/board.cpp
     src/board.h
     src/move.h
-    src/move.cpp
+    # src/move.cpp
     src/chess_constants.h
     src/io_utils.h
     src/io_utils.cpp
+    src/tile.h
+    src/tile.cpp
 )
 
 target_include_directories(chess_engine PRIVATE

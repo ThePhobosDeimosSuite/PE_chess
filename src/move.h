@@ -16,8 +16,8 @@ struct Coordinate
 
 class Move
 {
-    Coordinate m_origin;
-    Coordinate m_destination;
+    const Coordinate m_origin;
+    const Coordinate m_destination;
 
 public:
     // Move(int originX, int originY, int destinationX, int destinationY) : m_origin{originX, originY}, m_destination{destinationX, destinationY} {}

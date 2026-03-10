@@ -4,16 +4,6 @@
 #include <format>
 #include <iostream>
 
-namespace Rendering
-{
-
-    std::ostream &operator<<(std::ostream &out, const Rendering::TileDisplay &tile)
-    {
-        out << tile.color << tile.icon << OutputUtils::defaultANSIColor;
-        return out;
-    }
-}
-
 std::ostream &operator<<(std::ostream &out, Tile tile)
 {
     out << Rendering::tileDisplayValue[tile];
@@ -86,6 +76,11 @@ void Board::setTile(Coordinate coordinate, Tile tile)
 void Board::movePiece(const Move &move)
 {
     auto originTile{this->getTile(move.getOrigin())};
+    movePiece(move, originTile);
+}
+
+void Board::movePiece(const Move &move, Tile originTile)
+{
     setTile(move.getDestination(), originTile);
     setTile(move.getOrigin(), Tile::Empty);
 }
@@ -111,7 +106,9 @@ void Board::movePlayerPiece(const Move &move)
 
     // TODO check move conditions
 
-    movePiece(move);
+    movePiece(move, originTile);
+
+    // TODO check is destination tile is an enemy, if so print a special message
 
     auto destinationAxisChar{OutputUtils::coordinateToAxisChar(move.getDestination())};
     m_messageBuffer.emplace_back(std::format("Tile ({}, {}) moved to ({}, {})",

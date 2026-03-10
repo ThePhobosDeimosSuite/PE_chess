@@ -2,34 +2,12 @@
 #include "chess_constants.h"
 #include "move.h"
 #include "io_utils.h"
+#include "tile.h"
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <assert.h>
 #include <array>
-
-enum Tile : uint8_t
-{
-    Empty, // 0
-
-    B_Pawn,   // 1
-    B_Rook,   // 2
-    B_Bishop, // 3
-    B_Knight, // 4
-    B_King,   // 5
-    B_Queen,  // 6
-
-    W_Pawn,   // 7
-    W_Rook,   // 8
-    W_Bishop, // 9
-    W_Knight, // 10
-    W_King,   // 11
-    W_Queen,  // 12
-
-    max_tile
-};
-
-std::ostream &operator<<(std::ostream &out, Tile tile);
 
 using BoardType = std::array<Tile, Chess::BoardSize>;
 
@@ -51,13 +29,6 @@ namespace Settings
 namespace Rendering
 {
     // Diplay information for each tile
-    struct TileDisplay
-    {
-        std::string_view color{};
-        std::string_view icon{};
-
-        friend std::ostream &operator<<(std::ostream &out, const TileDisplay &tile);
-    };
 
     inline constexpr std::array horizontalAxisChar{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
     inline constexpr std::array verticalAxisChar{'1', '2', '3', '4', '5', '6', '7', '8'};
@@ -83,7 +54,6 @@ namespace Rendering
         TileDisplay{OutputUtils::whiteTileANSIColor, "Q"},
     };
     static_assert(tileDisplayValue.size() == Tile::max_tile);
-
 };
 
 class Board
@@ -100,6 +70,7 @@ public:
 
 private:
     void movePiece(const Move &move);
+    void movePiece(const Move &move, Tile originTile);
     bool isPlayerTile(Tile tile);
     Tile getTile(Coordinate coordinate) const;
     void setTile(Coordinate coordinate, Tile tile);
