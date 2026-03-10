@@ -1,17 +1,15 @@
 #include "board.h"
+#include "io_utils.h"
 #include <iomanip>
+#include <format>
 #include <iostream>
 
 namespace Rendering
 {
-    void clearScreen()
-    {
-        std::cout << "\x1B[2J\x1B[H";
-    }
 
     std::ostream &operator<<(std::ostream &out, const Rendering::TileDisplay &tile)
     {
-        out << tile.color << tile.icon << Rendering::defaultANSIColor;
+        out << tile.color << tile.icon << OutputUtils::defaultANSIColor;
         return out;
     }
 }
@@ -90,4 +88,36 @@ void Board::movePiece(const Move &move)
     auto originTile{this->getTile(move.getOrigin())};
     setTile(move.getDestination(), originTile);
     setTile(move.getOrigin(), Tile::Empty);
+}
+
+bool Board::isPlayerTile(Tile tile)
+{
+    return tile >= Tile::W_Pawn && tile <= Tile::W_Queen;
+}
+
+void Board::movePlayerPiece(const Move &move)
+{
+    auto originTile{this->getTile(move.getOrigin())};
+    auto originAxisChar{OutputUtils::coordinateToAxisChar(move.getOrigin())};
+
+    if (!isPlayerTile(originTile))
+    {
+        m_messageBuffer.emplace_back(std::format("Tile ({}, {}) is not one of your piece",
+                                                 originAxisChar.first,
+                                                 originAxisChar.second),
+                                     Message::Alert);
+        return;
+    }
+
+    // TODO check move conditions
+
+    movePiece(move);
+
+    auto destinationAxisChar{OutputUtils::coordinateToAxisChar(move.getDestination())};
+    m_messageBuffer.emplace_back(std::format("Tile ({}, {}) moved to ({}, {})",
+                                             originAxisChar.first,
+                                             originAxisChar.second,
+                                             destinationAxisChar.first,
+                                             destinationAxisChar.second),
+                                 Message::Success);
 }

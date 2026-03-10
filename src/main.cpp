@@ -1,24 +1,30 @@
-#include <iostream>
 #include "board.h"
 #include "move.h"
-#include "input_utils.h"
+#include "io_utils.h"
+#include <iostream>
+#include <vector>
 
 int main()
 {
-    Board board{Settings::STARTING_BOARD};
-    Rendering::clearScreen();
+    std::vector<Message> messageBuffer{};
+    Board board{Settings::startingBoard, messageBuffer};
 
-    std::cout << board;
+    while (true)
+    {
+        OutputUtils::clearScreen();
+        std::cout << '\n';
+        std::cout << board;
+        std::cout << '\n';
 
-    std::cout << '\n';
-    Move move{InputUtils::getMoveInputFromUser()};
-    std::cout << "Move x: " << move.getOrigin().x << " origin y: " << move.getOrigin().y;
-    std::cout << '\n';
-    std::cout << "Move x: " << move.getDestination().x << " desti y: " << move.getDestination().y;
-    // board.movePiece(move);
+        for (Message m : messageBuffer)
+        {
+            std::cout << m << '\n';
+        }
+        messageBuffer.clear();
 
-    // Rendering::clearScreen();
-    // std::cout << board;
+        Move move{InputUtils::getMoveInputFromUser()};
 
+        board.movePlayerPiece(move);
+    }
     return 0;
 }

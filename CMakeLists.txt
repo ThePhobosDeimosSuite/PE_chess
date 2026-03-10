@@ -12,8 +12,8 @@ add_executable(chess_engine
     src/move.h
     src/move.cpp
     src/chess_constants.h
-    src/input_utils.h
-    src/input_utils.cpp
+    src/io_utils.h
+    src/io_utils.cpp
 )
 
 target_include_directories(chess_engine PRIVATE
