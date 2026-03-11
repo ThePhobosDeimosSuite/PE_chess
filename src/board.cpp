@@ -1,67 +1,7 @@
 #include "board.h"
-#include "io_utils.h"
 #include <iomanip>
 #include <format>
 #include <iostream>
-
-std::ostream &operator<<(std::ostream &out, Tile tile)
-{
-    out << Rendering::tileDisplayValue[tile];
-    return out;
-}
-
-void printHorizontalAxis(std::ostream &out)
-{
-    out << "  ";
-    for (int i{0}; i < std::ssize(Rendering::horizontalAxisChar); i++)
-    {
-        out << " " << Rendering::horizontalAxisChar[i] << " ";
-    }
-}
-
-void printHorizontalLine(std::ostream &out)
-{
-    out << Rendering::horizontalLine;
-}
-
-std::ostream &operator<<(std::ostream &out, const Board &board)
-{
-    printHorizontalAxis(out);
-    out << '\n';
-    printHorizontalLine(out);
-    out << '\n';
-
-    for (int i{0}; i < Chess::BoardSize; i++)
-    {
-        if (i % Chess::RowSize == 0)
-        {
-            if (i != 0)
-            {
-                out << Rendering::verticalLine;
-                // this will implicit cast correctly right?
-                out << Rendering::verticalAxisChar[i / Chess::RowSize - 1];
-
-                out << '\n';
-            }
-
-            out << Rendering::verticalAxisChar[i / Chess::RowSize];
-            out << Rendering::verticalLine;
-        }
-
-        // printing space instead of setw() because setw() doesn't work with the color concat when printing Tile
-        out << " " << board.m_board[i] << " ";
-    }
-
-    out << Rendering::verticalLine;
-    out << Rendering::verticalAxisChar[Chess::RowSize - 1];
-
-    out << '\n';
-    printHorizontalLine(out);
-    out << '\n';
-    printHorizontalAxis(out);
-
-    return out;
-}
 
 Tile Board::getTile(Coordinate coordinate) const
 {
@@ -93,7 +33,7 @@ bool Board::isPlayerTile(Tile tile)
 void Board::movePlayerPiece(const Move &move)
 {
     auto originTile{this->getTile(move.getOrigin())};
-    auto originAxisChar{OutputUtils::coordinateToAxisChar(move.getOrigin())};
+    auto originAxisChar{move.getOrigin().toAxisChar()};
 
     if (!isPlayerTile(originTile))
     {
@@ -110,7 +50,7 @@ void Board::movePlayerPiece(const Move &move)
 
     // TODO check is destination tile is an enemy, if so print a special message
 
-    auto destinationAxisChar{OutputUtils::coordinateToAxisChar(move.getDestination())};
+    auto destinationAxisChar{move.getDestination().toAxisChar()};
     m_messageBuffer.emplace_back(std::format("Tile ({}, {}) moved to ({}, {})",
                                              originAxisChar.first,
                                              originAxisChar.second,

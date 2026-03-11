@@ -1,4 +1,6 @@
+#pragma once
 #include <iostream>
+#include <array>
 
 enum Tile : uint8_t
 {
@@ -22,11 +24,3 @@ enum Tile : uint8_t
 };
 
 std::ostream &operator<<(std::ostream &out, Tile tile);
-
-struct TileDisplay
-{
-    std::string_view color{};
-    std::string_view icon{};
-
-    friend std::ostream &operator<<(std::ostream &out, const TileDisplay &tile);
-};

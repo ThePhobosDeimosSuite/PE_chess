@@ -1,18 +1,7 @@
 #pragma once
 #include "chess_constants.h"
+#include "coordinate.h"
 #include <assert.h>
-
-struct Coordinate
-{
-    int x;
-    int y;
-
-    Coordinate(int v_x, int v_y) : x{v_x}, y{v_y}
-    {
-        assert(x < Chess::RowSize && "x coordinate is out of bound");
-        assert(y < Chess::RowSize && "y coordinate is out of bound");
-    }
-};
 
 class Move
 {
