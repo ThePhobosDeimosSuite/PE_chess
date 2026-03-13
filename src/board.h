@@ -1,16 +1,16 @@
 #pragma once
 #include "move.h"
-#include "coordinate.h"
+#include "tile.h"
 #include "message.h"
 #include "chess_constants.h"
-#include "tile.h"
+#include "piece_type.h"
 #include <iostream>
 #include <utility>
 #include <vector>
 #include <assert.h>
 #include <array>
 
-using BoardType = std::array<Tile, Chess::BoardSize>;
+using BoardType = std::array<PieceType, Chess::BoardSize>;
 
 namespace Chess
 {
@@ -41,8 +41,8 @@ public:
 
 private:
     void movePiece(const Move &move);
-    void movePiece(const Move &move, Tile originTile);
-    bool isPlayerTile(Tile tile);
-    Tile getTile(Coordinate coordinate) const;
-    void setTile(Coordinate coordinate, Tile tile);
+    void movePiece(const Move &move, PieceType originTile);
+    bool isPlayerTile(PieceType tile);
+    PieceType getTile(Tile coordinate) const;
+    void setTile(Tile coordinate, PieceType tile);
 };

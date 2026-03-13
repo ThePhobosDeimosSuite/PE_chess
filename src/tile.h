@@ -1,26 +1,50 @@
 #pragma once
-#include <iostream>
-#include <array>
+#include "chess_constants.h"
+#include <assert.h>
+#include <utility>
 
-enum Tile : uint8_t
+namespace TileUtils
 {
-    Empty, // 0
+    inline constexpr int invalidTile{-1};
+}
 
-    B_Pawn,   // 1
-    B_Rook,   // 2
-    B_Bishop, // 3
-    B_Knight, // 4
-    B_King,   // 5
-    B_Queen,  // 6
+struct Tile
+{
+    int x{TileUtils::invalidTile};
+    int y{TileUtils::invalidTile};
 
-    W_Pawn,   // 7
-    W_Rook,   // 8
-    W_Bishop, // 9
-    W_Knight, // 10
-    W_King,   // 11
-    W_Queen,  // 12
+    Tile(int v_x, int v_y) : x{v_x}, y{v_y}
+    {
+        assert(x < Chess::RowSize && "x coordinate is out of bound");
+        assert(y < Chess::RowSize && "y coordinate is out of bound");
+    }
 
-    max_tile
+    Tile(char horizontalAxisChar, char verticalAxisChar)
+    {
+        for (int i{0}; i < Chess::horizontalAxisChar.size(); i++)
+        {
+            if (Chess::horizontalAxisChar[i] == horizontalAxisChar)
+            {
+                x = i;
+                break;
+            }
+        }
+
+        for (int i{0}; i < Chess::verticalAxisChar.size(); i++)
+        {
+            if (Chess::verticalAxisChar[i] == verticalAxisChar)
+            {
+                y = i;
+                break;
+            }
+        }
+    }
+
+    std::pair<char, char> toAxisChar() const
+    {
+        char horizontal_char{Chess::horizontalAxisChar[this->x]};
+        char vertical_char{Chess::verticalAxisChar[this->y]};
+
+        return {horizontal_char, vertical_char};
+    }
 };
-
-std::ostream &operator<<(std::ostream &out, Tile tile);

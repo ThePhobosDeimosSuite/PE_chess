@@ -3,12 +3,12 @@
 #include <format>
 #include <iostream>
 
-Tile Board::getTile(Coordinate coordinate) const
+PieceType Board::getTile(Tile coordinate) const
 {
     return m_board[coordinate.y * Chess::RowSize + coordinate.x];
 }
 
-void Board::setTile(Coordinate coordinate, Tile tile)
+void Board::setTile(Tile coordinate, PieceType tile)
 {
     m_board[coordinate.y * Chess::RowSize + coordinate.x] = tile;
 }
@@ -19,15 +19,15 @@ void Board::movePiece(const Move &move)
     movePiece(move, originTile);
 }
 
-void Board::movePiece(const Move &move, Tile originTile)
+void Board::movePiece(const Move &move, PieceType originTile)
 {
     setTile(move.getDestination(), originTile);
-    setTile(move.getOrigin(), Tile::Empty);
+    setTile(move.getOrigin(), PieceType::Empty);
 }
 
-bool Board::isPlayerTile(Tile tile)
+bool Board::isPlayerTile(PieceType tile)
 {
-    return tile >= Tile::W_Pawn && tile <= Tile::W_Queen;
+    return tile >= PieceType::W_Pawn && tile <= PieceType::W_Queen;
 }
 
 void Board::movePlayerPiece(const Move &move)

@@ -24,7 +24,7 @@ namespace Input
         return isalpha(input[0]) && std::isdigit(input[1]);
     }
 
-    Coordinate getCoordinateInputFromUser(std::string_view prompt)
+    Tile getCoordinateInputFromUser(std::string_view prompt)
     {
         while (true)
         {
@@ -34,8 +34,8 @@ namespace Input
 
             if (isInputValid(input))
             {
-                Coordinate coordinate{input[0], input[1]};
-                if (coordinate.x != CoordinateUtils::invalidCoordinate && coordinate.y != CoordinateUtils::invalidCoordinate)
+                Tile coordinate{input[0], input[1]};
+                if (coordinate.x != TileUtils::invalidTile && coordinate.y != TileUtils::invalidTile)
                 {
                     return coordinate;
                 }

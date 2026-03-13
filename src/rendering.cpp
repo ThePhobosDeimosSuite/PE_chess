@@ -53,7 +53,7 @@ std::ostream &operator<<(std::ostream &out, const Board &board)
     return out;
 }
 
-std::ostream &operator<<(std::ostream &out, Tile tile)
+std::ostream &operator<<(std::ostream &out, PieceType tile)
 {
     out << Rendering::tileDisplayValue[tile];
     return out;

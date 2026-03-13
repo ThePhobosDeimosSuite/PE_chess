@@ -16,9 +16,9 @@ add_executable(chess_engine
     src/rendering.cpp
     src/input.h
     src/input.cpp
+    src/piece_type.h
     src/tile.h
-    src/coordinate.h
-    src/coordinate.cpp
+    # src/coordinate.cpp
 )
 
 target_include_directories(chess_engine PRIVATE

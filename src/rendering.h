@@ -1,6 +1,6 @@
 #pragma once
 #include "move.h"
-#include "tile.h"
+#include "piece_type.h"
 #include "board.h"
 #include "message.h"
 #include <string_view>
@@ -37,5 +37,5 @@ namespace Rendering
         TileDisplay{ANSIColor::whiteTile, "K"},
         TileDisplay{ANSIColor::whiteTile, "Q"},
     };
-    static_assert(tileDisplayValue.size() == Tile::max_tile);
+    static_assert(tileDisplayValue.size() == PieceType::max_tile);
 }

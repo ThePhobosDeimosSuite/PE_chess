@@ -1,5 +1,5 @@
 #pragma once
-#include "tile.h"
+#include "piece_type.h"
 #include "move.h"
 #include <string>
 
