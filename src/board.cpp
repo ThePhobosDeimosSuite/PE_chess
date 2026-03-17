@@ -3,58 +3,54 @@
 #include <format>
 #include <iostream>
 
-PieceType Board::getTile(Tile coordinate) const
+PieceType Board::getPieceType(const Tile &tile) const
 {
-    return m_board[coordinate.y * Chess::RowSize + coordinate.x];
+    return m_board[tile.y * Chess::RowSize + tile.x];
 }
 
-void Board::setTile(Tile coordinate, PieceType tile)
+void Board::setPieceType(Tile tile, PieceType pieceType)
 {
-    m_board[coordinate.y * Chess::RowSize + coordinate.x] = tile;
+    m_board[tile.y * Chess::RowSize + tile.x] = pieceType;
 }
 
 void Board::movePiece(const Move &move)
 {
-    auto originTile{this->getTile(move.getOrigin())};
+    auto originTile{this->getPieceType(move.getOrigin())};
     movePiece(move, originTile);
 }
 
-void Board::movePiece(const Move &move, PieceType originTile)
+void Board::movePiece(const Move &move, PieceType originPieceType)
 {
-    setTile(move.getDestination(), originTile);
-    setTile(move.getOrigin(), PieceType::Empty);
+    setPieceType(move.getDestination(), originPieceType);
+    setPieceType(move.getOrigin(), PieceType::Empty);
 }
 
-bool Board::isPlayerTile(PieceType tile)
+bool Board::isPlayerTile(const Tile &tile) const
 {
-    return tile >= PieceType::W_Pawn && tile <= PieceType::W_Queen;
+    auto pieceType{getPieceType(tile)};
+    return Piece::getPieceColor(pieceType) == PieceColor::White;
 }
 
-void Board::movePlayerPiece(const Move &move)
-{
-    auto originTile{this->getTile(move.getOrigin())};
-    auto originAxisChar{move.getOrigin().toAxisChar()};
+// void Board::movePlayerPiece(const Move &move)
+// {
+//     auto originTile{this->getPieceType(move.getOrigin())};
+//     auto originCoordinate{move.getOrigin().toCoordinate()};
 
-    if (!isPlayerTile(originTile))
-    {
-        m_messageBuffer.emplace_back(std::format("Tile ({}, {}) is not one of your piece",
-                                                 originAxisChar.first,
-                                                 originAxisChar.second),
-                                     Message::Alert);
-        return;
-    }
+//     if (!isPlayerTile(originTile))
+//     {
+//         m_messageBuffer.emplace_back(std::format("Tile ({}, {}) is not one of your piece",
+//                                                  originCoordinate.first,
+//                                                  originCoordinate.second),
+//                                      Message::Alert);
+//         return;
+//     }
 
-    // TODO check move conditions
+//     // TODO check move conditions
+//     auto availableMoves{getAvailableMoves(move.getOrigin())};
 
-    movePiece(move, originTile);
+//     movePiece(move, originTile);
 
-    // TODO check is destination tile is an enemy, if so print a special message
+//     // TODO check is destination tile is an enemy, if so print a special message
 
-    auto destinationAxisChar{move.getDestination().toAxisChar()};
-    m_messageBuffer.emplace_back(std::format("Tile ({}, {}) moved to ({}, {})",
-                                             originAxisChar.first,
-                                             originAxisChar.second,
-                                             destinationAxisChar.first,
-                                             destinationAxisChar.second),
-                                 Message::Success);
-}
+//     auto destinationCoordinate{move.getDestination().toCoordinate()};
+// }

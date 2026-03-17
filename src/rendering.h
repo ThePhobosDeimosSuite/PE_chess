@@ -21,6 +21,7 @@ namespace Rendering
         friend std::ostream &operator<<(std::ostream &out, const TileDisplay &tile);
     };
 
+    // TODO use getPieceColor to get the color of a tile
     // Order is defined in Tile.h
     inline constexpr std::array tileDisplayValue{
         TileDisplay{ANSIColor::defaultColor, "."},

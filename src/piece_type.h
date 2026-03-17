@@ -1,6 +1,15 @@
 #pragma once
 #include <iostream>
+#include <format>
 #include <array>
+
+enum class PieceColor
+{
+    Black,
+    White,
+    None,
+    max_color
+};
 
 enum PieceType : uint8_t
 {
@@ -22,5 +31,23 @@ enum PieceType : uint8_t
 
     max_tile
 };
+std::ostream &
+operator<<(std::ostream &out, PieceType tile);
 
-std::ostream &operator<<(std::ostream &out, PieceType tile);
+namespace Piece
+{
+    inline constexpr PieceColor getPieceColor(PieceType pieceType)
+    {
+        if (pieceType >= B_Pawn && pieceType <= B_Queen)
+        {
+            return PieceColor::Black;
+        }
+
+        if (pieceType >= W_Pawn && pieceType <= W_Queen)
+        {
+            return PieceColor::White;
+        }
+
+        return PieceColor::None;
+    };
+}

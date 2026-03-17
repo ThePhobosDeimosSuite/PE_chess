@@ -23,26 +23,24 @@ namespace Chess
         Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
         Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
 
-        W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn,
+        Empty, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn,
         W_Rook, W_Knight, W_Bishop, W_Queen, W_King, W_Bishop, W_Knight, W_Rook};
 }
 
 class Board
 {
     BoardType m_board{};
-    std::vector<Message> &m_messageBuffer;
 
 public:
-    Board(BoardType board, std::vector<Message> &messageBuffer) : m_board{board}, m_messageBuffer{messageBuffer} {}
+    Board(BoardType board) : m_board{board} {}
 
     friend std::ostream &operator<<(std::ostream &out, const Board &board);
 
-    void movePlayerPiece(const Move &move);
+    PieceType getPieceType(const Tile &tile) const;
+    void movePiece(const Move &move);
+    bool isPlayerTile(const Tile &tile) const;
 
 private:
-    void movePiece(const Move &move);
-    void movePiece(const Move &move, PieceType originTile);
-    bool isPlayerTile(PieceType tile);
-    PieceType getTile(Tile coordinate) const;
-    void setTile(Tile coordinate, PieceType tile);
+    void setPieceType(Tile tile, PieceType pieceType);
+    void movePiece(const Move &move, PieceType originPieceType);
 };

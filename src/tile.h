@@ -6,6 +6,7 @@
 namespace TileUtils
 {
     inline constexpr int invalidTile{-1};
+    inline constexpr int maxTile{7};
 }
 
 struct Tile
@@ -15,8 +16,8 @@ struct Tile
 
     Tile(int v_x, int v_y) : x{v_x}, y{v_y}
     {
-        assert(x < Chess::RowSize && "x coordinate is out of bound");
-        assert(y < Chess::RowSize && "y coordinate is out of bound");
+        assert(x <= TileUtils::maxTile && "x coordinate is out of bound");
+        assert(y <= TileUtils::maxTile && "y coordinate is out of bound");
     }
 
     Tile(char horizontalAxisChar, char verticalAxisChar)
@@ -40,11 +41,16 @@ struct Tile
         }
     }
 
-    std::pair<char, char> toAxisChar() const
+    std::pair<char, char> toCoordinate() const
     {
         char horizontal_char{Chess::horizontalAxisChar[this->x]};
         char vertical_char{Chess::verticalAxisChar[this->y]};
 
         return {horizontal_char, vertical_char};
+    }
+
+    bool operator==(const Tile &tile) const
+    {
+        return x == tile.x && y == tile.y;
     }
 };
