@@ -5,8 +5,7 @@
 #include "utils.h"
 #include <vector>
 #include <array>
-
-namespace PieceMovement
+namespace MoveGenerator
 {
     constexpr std::array<std::pair<int, int>, 4> rookDirections{
         {{1, 0},
@@ -39,25 +38,17 @@ namespace PieceMovement
          {-1, 1}}};
     constexpr std::array<std::pair<int, int>, 1> whitePawnOffsets{{{0, -1}}};
     constexpr std::array<std::pair<int, int>, 1> blackPawnOffsets{{{0, 1}}};
-}
-class MoveGenerator
-{
-    const Board &m_board;
 
-public:
-    MoveGenerator(const Board &board) : m_board{board} {}
+    std::vector<Move> getAvailableMoves(const Board &board, const Tile &tile);
 
-    std::vector<Move> getAvailableMoves(Tile tile) const;
-
-private:
     template <std::size_t SIZE>
-    std::vector<Move> generateDirectionMove(Tile originTile, PieceColor originPieceColor,
-                                            const std::array<std::pair<int, int>, SIZE> &moveDirections) const;
+    std::vector<Move> generateDirectionMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
+                                            const std::array<std::pair<int, int>, SIZE> &moveDirections);
     template <std::size_t SIZE>
-    std::vector<Move> generateOffetMove(Tile originTile, PieceColor originPieceColor,
-                                        const std::array<std::pair<int, int>, SIZE> &moveOffsets) const;
+    std::vector<Move> generateOffetMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
+                                        const std::array<std::pair<int, int>, SIZE> &moveOffsets);
     template <std::size_t SIZE1, std::size_t SIZE2>
-    std::vector<Move> generatePawnMove(Tile originTile, PieceColor originPieceColor,
+    std::vector<Move> generatePawnMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
                                        const std::array<std::pair<int, int>, SIZE1> &moveOffsets,
-                                       const std::array<std::pair<int, int>, SIZE2> &attackOffsets) const;
+                                       const std::array<std::pair<int, int>, SIZE2> &attackOffsets);
 };

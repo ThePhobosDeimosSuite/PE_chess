@@ -25,7 +25,6 @@ int main()
 {
     std::vector<Message> messageBuffer{};
     Board board{Chess::startingBoard};
-    MoveGenerator moveGenerator{board};
 
     while (true)
     {
@@ -44,7 +43,7 @@ int main()
             continue;
         }
 
-        auto availableMoves{moveGenerator.getAvailableMoves(move.getOrigin())};
+        auto availableMoves{MoveGenerator::getAvailableMoves(board, move.getOrigin())};
 
         bool found{false};
         for (const Move &availableMove : availableMoves)
