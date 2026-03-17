@@ -7,6 +7,20 @@
 #include <format>
 #include <vector>
 
+void printUI(const Board &board, std::vector<Message> &messageBuffer)
+{
+    Rendering::clearScreen();
+    std::cout << '\n';
+    std::cout << board;
+    std::cout << '\n';
+
+    for (Message m : messageBuffer)
+    {
+        std::cout << m << '\n';
+    }
+    messageBuffer.clear();
+}
+
 int main()
 {
     std::vector<Message> messageBuffer{};
@@ -15,16 +29,7 @@ int main()
 
     while (true)
     {
-        Rendering::clearScreen();
-        std::cout << '\n';
-        std::cout << board;
-        std::cout << '\n';
-
-        for (Message m : messageBuffer)
-        {
-            std::cout << m << '\n';
-        }
-        messageBuffer.clear();
+        printUI(board, messageBuffer);
 
         Move move{Input::getMoveInputFromUser()};
         auto originCoordinate{move.getOrigin().toCoordinate()};
@@ -44,7 +49,6 @@ int main()
         bool found{false};
         for (const Move &availableMove : availableMoves)
         {
-            std::cout << availableMove;
             if (move == availableMove)
             {
                 found = true;
@@ -69,6 +73,19 @@ int main()
                                                    destinationCoordinate.second),
                                        Message::Alert);
         }
+
+        if (board.hasPlayerWon())
+        {
+            messageBuffer.emplace_back("You won!!!", Message::Success);
+            break;
+        }
+        else if (board.hasCPUWon())
+        {
+            messageBuffer.emplace_back("You lost :(", Message::Alert);
+            break;
+        }
     }
+
+    printUI(board, messageBuffer);
     return 0;
 }

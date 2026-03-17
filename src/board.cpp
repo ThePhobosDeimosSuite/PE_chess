@@ -31,26 +31,31 @@ bool Board::isPlayerTile(const Tile &tile) const
     return Piece::getPieceColor(pieceType) == PieceColor::White;
 }
 
-// void Board::movePlayerPiece(const Move &move)
-// {
-//     auto originTile{this->getPieceType(move.getOrigin())};
-//     auto originCoordinate{move.getOrigin().toCoordinate()};
+PieceColor Board::getPieceColor(const Tile &tile) const
+{
+    return Piece::getPieceColor(getPieceType(tile));
+}
 
-//     if (!isPlayerTile(originTile))
-//     {
-//         m_messageBuffer.emplace_back(std::format("Tile ({}, {}) is not one of your piece",
-//                                                  originCoordinate.first,
-//                                                  originCoordinate.second),
-//                                      Message::Alert);
-//         return;
-//     }
+bool Board::hasPlayerWon() const
+{
+    for (PieceType pieceType : m_board)
+    {
+        if (pieceType == B_King)
+        {
+            return false;
+        }
+    }
+    return true;
+}
 
-//     // TODO check move conditions
-//     auto availableMoves{getAvailableMoves(move.getOrigin())};
-
-//     movePiece(move, originTile);
-
-//     // TODO check is destination tile is an enemy, if so print a special message
-
-//     auto destinationCoordinate{move.getDestination().toCoordinate()};
-// }
+bool Board::hasCPUWon() const
+{
+    for (PieceType pieceType : m_board)
+    {
+        if (pieceType == W_King)
+        {
+            return false;
+        }
+    }
+    return true;
+}

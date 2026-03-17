@@ -23,7 +23,7 @@ namespace Chess
         Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
         Empty, Empty, Empty, Empty, Empty, Empty, Empty, Empty,
 
-        Empty, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn,
+        W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn, W_Pawn,
         W_Rook, W_Knight, W_Bishop, W_Queen, W_King, W_Bishop, W_Knight, W_Rook};
 }
 
@@ -37,8 +37,11 @@ public:
     friend std::ostream &operator<<(std::ostream &out, const Board &board);
 
     PieceType getPieceType(const Tile &tile) const;
+    PieceColor getPieceColor(const Tile &tile) const;
     void movePiece(const Move &move);
     bool isPlayerTile(const Tile &tile) const;
+    bool hasPlayerWon() const;
+    bool hasCPUWon() const;
 
 private:
     void setPieceType(Tile tile, PieceType pieceType);
