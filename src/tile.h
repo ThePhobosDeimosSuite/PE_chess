@@ -14,6 +14,7 @@ struct Tile
     int x{TileUtils::invalidTile};
     int y{TileUtils::invalidTile};
 
+    Tile() = default;
     Tile(int v_x, int v_y) : x{v_x}, y{v_y}
     {
         assert(x <= TileUtils::maxTile && "x coordinate is out of bound");

@@ -3,10 +3,11 @@
 #include "tile.h"
 #include "move.h"
 #include "utils.h"
-#include <vector>
 #include <array>
 namespace MoveGenerator
 {
+    constexpr int maxMoves{256};
+
     constexpr std::array<std::pair<int, int>, 4> rookDirections{
         {{1, 0},
          {-1, 0},
@@ -39,16 +40,19 @@ namespace MoveGenerator
     constexpr std::array<std::pair<int, int>, 1> whitePawnOffsets{{{0, -1}}};
     constexpr std::array<std::pair<int, int>, 1> blackPawnOffsets{{{0, 1}}};
 
-    std::vector<Move> getAvailableMoves(const Board &board, const Tile &tile);
+    void getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList, const Board &board, const Tile &tile);
 
     template <std::size_t SIZE>
-    std::vector<Move> generateDirectionMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
-                                            const std::array<std::pair<int, int>, SIZE> &moveDirections);
+    void generateDirectionMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                               const Board &board, const Tile &originTile, PieceColor originPieceColor,
+                               const std::array<std::pair<int, int>, SIZE> &moveDirections);
     template <std::size_t SIZE>
-    std::vector<Move> generateOffetMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
-                                        const std::array<std::pair<int, int>, SIZE> &moveOffsets);
+    void generateOffetMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                           const Board &board, const Tile &originTile, PieceColor originPieceColor,
+                           const std::array<std::pair<int, int>, SIZE> &moveOffsets);
     template <std::size_t SIZE1, std::size_t SIZE2>
-    std::vector<Move> generatePawnMove(const Board &board, const Tile &originTile, PieceColor originPieceColor,
-                                       const std::array<std::pair<int, int>, SIZE1> &moveOffsets,
-                                       const std::array<std::pair<int, int>, SIZE2> &attackOffsets);
+    void generatePawnMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                          const Board &board, const Tile &originTile, PieceColor originPieceColor,
+                          const std::array<std::pair<int, int>, SIZE1> &moveOffsets,
+                          const std::array<std::pair<int, int>, SIZE2> &attackOffsets);
 };
