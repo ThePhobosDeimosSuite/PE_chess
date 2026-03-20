@@ -17,6 +17,8 @@ add_executable(chess_engine
     src/rendering.cpp
     src/input.h
     src/utils.h
+    src/game.h
+    src/game.cpp
     src/input.cpp
     src/piece_type.h
     src/tile.h
