@@ -33,8 +33,7 @@ void Game::run()
             continue;
         }
 
-        // TODO use c-style array here to avoid initialization of moves
-        std::array<Move, MoveGenerator::maxMoves> availableMoves{};
+        std::array<Move, MoveGenerator::maxMoves> availableMoves;
         MoveGenerator::getAvailableMoves(availableMoves, m_board, move.getOrigin());
 
         bool found{false};
