@@ -14,7 +14,7 @@ void Game::printUI()
     m_messageBuffer.clear();
 }
 
-void Game::run()
+void Game::playerTurn()
 {
     while (true)
     {
@@ -34,14 +34,13 @@ void Game::run()
         }
 
         std::array<Move, MoveGenerator::maxMoves> availableMoves;
-        MoveGenerator::getAvailableMoves(availableMoves, m_board, move.getOrigin());
+        int count{0};
+        MoveGenerator::getAvailableMoves(availableMoves, count, m_board, move.getOrigin());
 
-        bool found{false};
         for (const Move &availableMove : availableMoves)
         {
             if (move == availableMove)
             {
-                found = true;
                 m_board.movePiece(move);
 
                 m_messageBuffer.emplace_back(std::format("Tile ({}, {}) moved to ({}, {})",
@@ -50,28 +49,68 @@ void Game::run()
                                                          destinationCoordinate.first,
                                                          destinationCoordinate.second),
                                              Message::Success);
-                break;
+                return;
             }
         }
 
-        if (!found)
-        {
-            m_messageBuffer.emplace_back(std::format("Tile ({}, {}) cannot go to ({}, {})",
-                                                     originCoordinate.first,
-                                                     originCoordinate.second,
-                                                     destinationCoordinate.first,
-                                                     destinationCoordinate.second),
-                                         Message::Alert);
-        }
+        m_messageBuffer.emplace_back(std::format("Tile ({}, {}) cannot go to ({}, {})",
+                                                 originCoordinate.first,
+                                                 originCoordinate.second,
+                                                 destinationCoordinate.first,
+                                                 destinationCoordinate.second),
+                                     Message::Alert);
+    }
+}
 
-        if (m_board.hasPlayerWon())
+void Game::CPUTurn()
+{
+    Move bestMove{CPU::generateBestMoves(m_board)};
+
+    auto originCoordinate{bestMove.getOrigin().toCoordinate()};
+    auto destinationCoordinate{bestMove.getDestination().toCoordinate()};
+
+    m_board.movePiece(bestMove);
+
+    m_messageBuffer.emplace_back(std::format("CPU moved tile ({}, {}) to ({}, {})",
+                                             originCoordinate.first,
+                                             originCoordinate.second,
+                                             destinationCoordinate.first,
+                                             destinationCoordinate.second),
+                                 Message::Info);
+}
+
+bool Game::isGameOver()
+{
+    return m_board.hasCPUWon() || m_board.hasPlayerWon();
+}
+
+void Game::emplaceGameOverMessage()
+{
+    if (m_board.hasPlayerWon())
+    {
+        m_messageBuffer.emplace_back("You won!!!", Message::Success);
+    }
+    else if (m_board.hasCPUWon())
+    {
+        m_messageBuffer.emplace_back("You lost :(", Message::Alert);
+    }
+}
+
+void Game::run()
+{
+    while (true)
+    {
+        playerTurn();
+        if (isGameOver())
         {
-            m_messageBuffer.emplace_back("You won!!!", Message::Success);
+            emplaceGameOverMessage();
             break;
         }
-        else if (m_board.hasCPUWon())
+
+        CPUTurn();
+        if (isGameOver())
         {
-            m_messageBuffer.emplace_back("You lost :(", Message::Alert);
+            emplaceGameOverMessage();
             break;
         }
     }

@@ -40,18 +40,23 @@ namespace MoveGenerator
     constexpr std::array<std::pair<int, int>, 1> whitePawnOffsets{{{0, -1}}};
     constexpr std::array<std::pair<int, int>, 1> blackPawnOffsets{{{0, 1}}};
 
-    void getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList, const Board &board, const Tile &tile);
+    void getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList, const Board &board, PieceColor color);
+
+    void getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList, int &count, const Board &board, const Tile &tile);
 
     template <std::size_t SIZE>
     void generateDirectionMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                               int &count,
                                const Board &board, const Tile &originTile, PieceColor originPieceColor,
                                const std::array<std::pair<int, int>, SIZE> &moveDirections);
     template <std::size_t SIZE>
     void generateOffetMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                           int &count,
                            const Board &board, const Tile &originTile, PieceColor originPieceColor,
                            const std::array<std::pair<int, int>, SIZE> &moveOffsets);
     template <std::size_t SIZE1, std::size_t SIZE2>
     void generatePawnMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                          int &count,
                           const Board &board, const Tile &originTile, PieceColor originPieceColor,
                           const std::array<std::pair<int, int>, SIZE1> &moveOffsets,
                           const std::array<std::pair<int, int>, SIZE2> &attackOffsets);

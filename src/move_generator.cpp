@@ -8,11 +8,10 @@ bool constexpr isTileInPlayingSpace(int x, int y)
 
 template <std::size_t SIZE>
 void MoveGenerator::generateDirectionMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                          int &count,
                                           const Board &board, const Tile &originTile, PieceColor originPieceColor,
                                           const std::array<std::pair<int, int>, SIZE> &moveDirections)
 {
-    int count{0};
-
     for (auto [dx, dy] : moveDirections)
     {
         int x{originTile.x + dx};
@@ -45,11 +44,10 @@ void MoveGenerator::generateDirectionMove(std::array<Move, MoveGenerator::maxMov
 
 template <std::size_t SIZE>
 void MoveGenerator::generateOffetMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                      int &count,
                                       const Board &board, const Tile &originTile, PieceColor originPieceColor,
                                       const std::array<std::pair<int, int>, SIZE> &moveOffsets)
 {
-    int count{0};
-
     for (auto [dx, dy] : moveOffsets)
     {
         int x{originTile.x + dx};
@@ -69,12 +67,11 @@ void MoveGenerator::generateOffetMove(std::array<Move, MoveGenerator::maxMoves> 
 
 template <std::size_t SIZE1, std::size_t SIZE2>
 void MoveGenerator::generatePawnMove(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                     int &count,
                                      const Board &board, const Tile &originTile, PieceColor originPieceColor,
                                      const std::array<std::pair<int, int>, SIZE1> &moveOffsets,
                                      const std::array<std::pair<int, int>, SIZE2> &attackOffsets)
 {
-    int count{0};
-
     for (auto [dx, dy] : moveOffsets)
     {
         int x{originTile.x + dx};
@@ -109,38 +106,61 @@ void MoveGenerator::generatePawnMove(std::array<Move, MoveGenerator::maxMoves> &
 }
 
 void MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                      int &count,
                                       const Board &board, const Tile &tile)
 {
     auto pieceType{board.getPieceType(tile)};
+    if (pieceType == PieceType::Empty)
+    {
+        return;
+    }
+
     auto pieceColor{Piece::getPieceColor(pieceType)};
 
     switch (pieceType)
     {
     case PieceType::B_Rook:
     case PieceType::W_Rook:
-        generateDirectionMove(moveList, board, tile, pieceColor, MoveGenerator::rookDirections);
+        generateDirectionMove(moveList, count, board, tile, pieceColor, MoveGenerator::rookDirections);
         break;
     case PieceType::B_Bishop:
     case PieceType::W_Bishop:
-        generateDirectionMove(moveList, board, tile, pieceColor, MoveGenerator::bishopDirections);
+        generateDirectionMove(moveList, count, board, tile, pieceColor, MoveGenerator::bishopDirections);
         break;
     case PieceType ::B_Queen:
     case PieceType::W_Queen:
-        generateDirectionMove(moveList, board, tile, pieceColor, MoveGenerator::queenDirections);
+        generateDirectionMove(moveList, count, board, tile, pieceColor, MoveGenerator::queenDirections);
         break;
     case PieceType::B_Knight:
     case PieceType::W_Knight:
-        generateOffetMove(moveList, board, tile, pieceColor, MoveGenerator::knightOffsets);
+        generateOffetMove(moveList, count, board, tile, pieceColor, MoveGenerator::knightOffsets);
         break;
     case PieceType::B_King:
     case PieceType::W_King:
-        generateOffetMove(moveList, board, tile, pieceColor, MoveGenerator::kingOffsets);
+        generateOffetMove(moveList, count, board, tile, pieceColor, MoveGenerator::kingOffsets);
         break;
     case PieceType::B_Pawn:
-        generatePawnMove(moveList, board, tile, pieceColor, MoveGenerator::blackPawnOffsets, MoveGenerator::blackPawnAttackOffsets);
+        generatePawnMove(moveList, count, board, tile, pieceColor, MoveGenerator::blackPawnOffsets, MoveGenerator::blackPawnAttackOffsets);
         break;
     case PieceType::W_Pawn:
-        generatePawnMove(moveList, board, tile, pieceColor, MoveGenerator::whitePawnOffsets, MoveGenerator::whitePawnAttackOffsets);
+        generatePawnMove(moveList, count, board, tile, pieceColor, MoveGenerator::whitePawnOffsets, MoveGenerator::whitePawnAttackOffsets);
         break;
+    }
+}
+
+void MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                      const Board &board, PieceColor color)
+{
+    int count{0};
+    for (int i{0}; i < Chess::RowSize; i++)
+    {
+        for (int j{0}; j < Chess::RowSize; j++)
+        {
+            Tile tile{i, j};
+            if (board.getPieceColor(tile) == color)
+            {
+                getAvailableMoves(moveList, count, board, tile);
+            }
+        }
     }
 }

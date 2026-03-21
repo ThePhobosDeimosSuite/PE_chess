@@ -82,6 +82,8 @@ std::ostream &operator<<(std::ostream &out, Message &message)
         break;
     case Message::Success:
         out << ANSIColor::success << message.text << ANSIColor::defaultColor;
+    case Message::Info:
+        out << ANSIColor::info << message.text << ANSIColor::defaultColor;
     }
 
     return out;

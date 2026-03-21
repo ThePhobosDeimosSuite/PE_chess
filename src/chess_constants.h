@@ -17,6 +17,7 @@ namespace ANSIColor
     // Console ANSI display colors
     inline constexpr std::string_view error{"\033[31m"};
     inline constexpr std::string_view success{"\033[32m"};
+    inline constexpr std::string_view info{"\033[35m"};
     inline constexpr std::string_view blackTile{"\033[33m"};
     inline constexpr std::string_view whiteTile{"\033[34m"};
     inline constexpr std::string_view defaultColor{"\033[0m"};

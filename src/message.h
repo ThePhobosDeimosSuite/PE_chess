@@ -7,7 +7,8 @@ struct Message
     enum Type
     {
         Alert,
-        Success
+        Success,
+        Info
     };
 
     std::string text;

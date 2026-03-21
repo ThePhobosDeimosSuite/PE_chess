@@ -1,4 +1,6 @@
+#pragma once
 #include "board.h"
+#include "cpu.h"
 #include "rendering.h"
 #include "input.h"
 #include "message.h"
@@ -17,4 +19,8 @@ public:
 
 private:
     void printUI();
+    void playerTurn();
+    void CPUTurn();
+    void emplaceGameOverMessage();
+    bool isGameOver();
 };

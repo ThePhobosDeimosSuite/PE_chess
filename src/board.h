@@ -36,14 +36,17 @@ public:
 
     friend std::ostream &operator<<(std::ostream &out, const Board &board);
 
-    PieceType getPieceType(const Tile &tile) const;
+    const PieceType &getPieceType(const Tile &tile) const;
     PieceColor getPieceColor(const Tile &tile) const;
     void movePiece(const Move &move);
+    void unMovePiece(const Move &move);
     bool isPlayerTile(const Tile &tile) const;
+    bool isGameOver() const;
     bool hasPlayerWon() const;
     bool hasCPUWon() const;
 
 private:
-    void setPieceType(Tile tile, PieceType pieceType);
+    void setPieceType(const Tile &tile, PieceType pieceType);
     void movePiece(const Move &move, PieceType originPieceType);
+    void unMovePiece(const Move &move, PieceType originPieceType);
 };
