@@ -1,5 +1,6 @@
 #pragma once
 #include "tile.h"
+#include "piece_type.h"
 #include <iostream>
 #include <assert.h>
 
@@ -7,6 +8,7 @@ class Move
 {
     Tile m_origin{};
     Tile m_destination{};
+    PieceType m_capturedPiece{PieceType::Empty};
 
 public:
     // Move(int originX, int originY, int destinationX, int destinationY) : m_origin{originX, originY}, m_destination{destinationX, destinationY} {}
@@ -15,6 +17,9 @@ public:
 
     const Tile &getOrigin() const { return m_origin; };
     const Tile &getDestination() const { return m_destination; };
+
+    void setCapturedPiece(PieceType pieceType) { m_capturedPiece = pieceType; };
+    PieceType getCapturedPiece() const { return m_capturedPiece; };
 
     bool operator==(const Move &move) const
     {

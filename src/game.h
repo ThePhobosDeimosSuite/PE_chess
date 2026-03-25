@@ -19,6 +19,7 @@ public:
 
 private:
     void render();
+    void clearMessageBuffer();
     void playerTurn();
     void CPUTurn();
     void emplaceGameOverMessage();

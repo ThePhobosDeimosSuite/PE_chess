@@ -13,26 +13,17 @@ void Board::setPieceType(const Tile &tile, PieceType pieceType)
     m_board[tile.y * Chess::RowSize + tile.x] = pieceType;
 }
 
-void Board::movePiece(const Move &move)
+void Board::movePiece(Move &move)
 {
-    movePiece(move, this->getPieceType(move.getOrigin()));
+    move.setCapturedPiece(this->getPieceType(move.getDestination()));
+    setPieceType(move.getDestination(), this->getPieceType(move.getOrigin()));
+    setPieceType(move.getOrigin(), PieceType::Empty);
 }
 
 void Board::unMovePiece(const Move &move)
 {
-    unMovePiece(move, this->getPieceType(move.getDestination()));
-}
-
-void Board::movePiece(const Move &move, PieceType originPieceType)
-{
-    setPieceType(move.getDestination(), originPieceType);
-    setPieceType(move.getOrigin(), PieceType::Empty);
-}
-
-void Board::unMovePiece(const Move &move, PieceType originPieceType)
-{
-    setPieceType(move.getDestination(), PieceType::Empty);
-    setPieceType(move.getOrigin(), originPieceType);
+    setPieceType(move.getOrigin(), this->getPieceType(move.getDestination()));
+    setPieceType(move.getDestination(), move.getCapturedPiece());
 }
 
 bool Board::isPlayerTile(const Tile &tile) const

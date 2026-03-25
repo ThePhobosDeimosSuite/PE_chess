@@ -49,7 +49,7 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
     {
         int maxEval{INT_MIN};
         int i{0};
-        for (const auto &move : moves)
+        for (auto &move : moves)
         {
             if (i >= moveCount)
             {
@@ -78,7 +78,7 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
     {
         int minEval{INT_MAX};
         int i{0};
-        for (const auto &move : moves)
+        for (auto &move : moves)
         {
             if (i >= moveCount)
             {
@@ -114,7 +114,7 @@ Move CPU::generateBestMoves(Board &board)
     int moveCount{MoveGenerator::getAvailableMoves(moves, board, PieceColor::Black)};
 
     int i{0};
-    for (const auto &move : moves)
+    for (auto &move : moves)
     {
         if (i >= moveCount)
         {
@@ -123,7 +123,7 @@ Move CPU::generateBestMoves(Board &board)
 
         board.movePiece(move);
 
-        int score{alphabeta(board, minimaxDepth, INT_MIN, INT_MAX, false)};
+        int score{alphabeta(board, minmaxDepth, INT_MIN, INT_MAX, false)};
 
         board.unMovePiece(move);
 

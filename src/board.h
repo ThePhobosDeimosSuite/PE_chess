@@ -38,7 +38,7 @@ public:
 
     const PieceType &getPieceType(const Tile &tile) const;
     PieceColor getPieceColor(const Tile &tile) const;
-    void movePiece(const Move &move);
+    void movePiece(Move &move);
     void unMovePiece(const Move &move);
     bool isPlayerTile(const Tile &tile) const;
     bool isGameOver() const;
@@ -47,6 +47,4 @@ public:
 
 private:
     void setPieceType(const Tile &tile, PieceType pieceType);
-    void movePiece(const Move &move, PieceType originPieceType);
-    void unMovePiece(const Move &move, PieceType originPieceType);
 };

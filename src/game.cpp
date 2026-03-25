@@ -1,5 +1,10 @@
 #include "game.h"
 
+void Game::clearMessageBuffer()
+{
+    m_messageBuffer.clear();
+}
+
 void Game::render()
 {
     Rendering::clearScreen();
@@ -11,7 +16,6 @@ void Game::render()
     {
         std::cout << m << '\n';
     }
-    m_messageBuffer.clear();
 }
 
 void Game::playerTurn()
@@ -32,6 +36,8 @@ void Game::playerTurn()
                                          Message::Alert);
             continue;
         }
+
+        clearMessageBuffer();
 
         std::array<Move, MoveGenerator::maxMoves> availableMoves;
         int count{0};
@@ -64,7 +70,7 @@ void Game::playerTurn()
 
 void Game::CPUTurn()
 {
-    m_messageBuffer.emplace_back("\nCPU is thinking...", Message::Info);
+    m_messageBuffer.emplace_back("CPU is thinking...", Message::Info);
     render();
 
     Move bestMove{CPU::generateBestMoves(m_board)};
