@@ -18,7 +18,7 @@ public:
     void run();
 
 private:
-    void printUI();
+    void render();
     void playerTurn();
     void CPUTurn();
     void emplaceGameOverMessage();

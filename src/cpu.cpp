@@ -1,7 +1,35 @@
 #include "cpu.h"
 
+// Check who has the most piece
 int evaluate(const Board &board)
 {
+    if (board.hasCPUWon())
+    {
+        return 100000;
+    }
+    else if (board.hasPlayerWon())
+    {
+        return -100000;
+    }
+
+    int value{0};
+    for (int i{0}; i < Chess::RowSize; i++)
+    {
+        for (int j{0}; j < Chess::RowSize; j++)
+        {
+            auto pieceType{board.getPieceType(Tile{i, j})};
+            auto pieceColor{Piece::getPieceColor(pieceType)};
+            if (pieceColor == PieceColor::Black)
+            {
+                value += Piece::getPieceValue(pieceType);
+            }
+            else if (pieceColor == PieceColor::White)
+            {
+                value -= Piece::getPieceValue(pieceType);
+            }
+        }
+    }
+    return value;
 }
 
 int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
@@ -11,13 +39,23 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
         return evaluate(board);
     }
     std::array<Move, MoveGenerator::maxMoves> moves;
-    MoveGenerator::getAvailableMoves(moves, board, maximizing ? PieceColor::Black : PieceColor::White);
+    int moveCount{MoveGenerator::getAvailableMoves(moves, board, maximizing ? PieceColor::Black : PieceColor::White)};
+    if (moveCount == 0)
+    {
+        return evaluate(board);
+    }
 
     if (maximizing)
     {
         int maxEval{INT_MIN};
+        int i{0};
         for (const auto &move : moves)
         {
+            if (i >= moveCount)
+            {
+                break;
+            }
+
             board.movePiece(move);
 
             int eval{alphabeta(board, depth - 1, alpha, beta, !maximizing)};
@@ -31,6 +69,7 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
             {
                 break;
             }
+            i++;
         }
 
         return maxEval;
@@ -38,8 +77,14 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
     else
     {
         int minEval{INT_MAX};
+        int i{0};
         for (const auto &move : moves)
         {
+            if (i >= moveCount)
+            {
+                break;
+            }
+
             board.movePiece(move);
 
             int eval{alphabeta(board, depth - 1, alpha, beta, !maximizing)};
@@ -53,6 +98,7 @@ int alphabeta(Board &board, int depth, int alpha, int beta, bool maximizing)
             {
                 break;
             }
+            i++;
         }
 
         return minEval;
@@ -65,13 +111,19 @@ Move CPU::generateBestMoves(Board &board)
     Move bestMove;
 
     std::array<Move, MoveGenerator::maxMoves> moves;
-    MoveGenerator::getAvailableMoves(moves, board, PieceColor::Black);
+    int moveCount{MoveGenerator::getAvailableMoves(moves, board, PieceColor::Black)};
 
+    int i{0};
     for (const auto &move : moves)
     {
+        if (i >= moveCount)
+        {
+            break;
+        }
+
         board.movePiece(move);
 
-        int score{alphabeta(board, alphabetaDepth, INT_MIN, INT_MAX, false)};
+        int score{alphabeta(board, minimaxDepth, INT_MIN, INT_MAX, false)};
 
         board.unMovePiece(move);
 
@@ -80,6 +132,7 @@ Move CPU::generateBestMoves(Board &board)
             bestMove = move;
             bestScore = score;
         }
+        i++;
     }
 
     return bestMove;

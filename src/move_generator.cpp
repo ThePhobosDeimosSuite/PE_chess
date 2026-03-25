@@ -148,8 +148,8 @@ void MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> 
     }
 }
 
-void MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList,
-                                      const Board &board, PieceColor color)
+int MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &moveList,
+                                     const Board &board, PieceColor color)
 {
     int count{0};
     for (int i{0}; i < Chess::RowSize; i++)
@@ -163,4 +163,5 @@ void MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> 
             }
         }
     }
+    return count;
 }

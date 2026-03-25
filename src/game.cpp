@@ -1,6 +1,6 @@
 #include "game.h"
 
-void Game::printUI()
+void Game::render()
 {
     Rendering::clearScreen();
     std::cout << '\n';
@@ -18,7 +18,7 @@ void Game::playerTurn()
 {
     while (true)
     {
-        printUI();
+        render();
 
         Move move{Input::getMoveInputFromUser()};
         auto originCoordinate{move.getOrigin().toCoordinate()};
@@ -64,6 +64,9 @@ void Game::playerTurn()
 
 void Game::CPUTurn()
 {
+    m_messageBuffer.emplace_back("\nCPU is thinking...", Message::Info);
+    render();
+
     Move bestMove{CPU::generateBestMoves(m_board)};
 
     auto originCoordinate{bestMove.getOrigin().toCoordinate()};
@@ -115,5 +118,5 @@ void Game::run()
         }
     }
 
-    printUI();
+    render();
 }

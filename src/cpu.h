@@ -6,6 +6,6 @@
 
 namespace CPU
 {
-    inline constexpr int alphabetaDepth{10};
+    inline constexpr int minimaxDepth{7};
     Move generateBestMoves(Board &board);
 }
