@@ -13,11 +13,9 @@ int evaluate(const Board &board)
     }
 
     int value{0};
-    for (int i{0}; i < Chess::RowSize; i++)
-    {
-        for (int j{0}; j < Chess::RowSize; j++)
-        {
-            auto pieceType{board.getPieceType(Tile{i, j})};
+    board.forEachTile([&](const Tile &tile)
+                      {
+            auto pieceType{board.getPieceType(tile)};
             auto pieceColor{Piece::getPieceColor(pieceType)};
             if (pieceColor == PieceColor::Black)
             {
@@ -26,9 +24,8 @@ int evaluate(const Board &board)
             else if (pieceColor == PieceColor::White)
             {
                 value -= Piece::getPieceValue(pieceType);
-            }
-        }
-    }
+            } });
+
     return value;
 }
 

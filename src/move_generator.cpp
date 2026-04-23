@@ -152,6 +152,7 @@ int MoveGenerator::getAvailableMoves(std::array<Move, MoveGenerator::maxMoves> &
                                      const Board &board, PieceColor color)
 {
     int count{0};
+    // TODO use lambda forEachTile in board
     for (int i{0}; i < Chess::RowSize; i++)
     {
         for (int j{0}; j < Chess::RowSize; j++)

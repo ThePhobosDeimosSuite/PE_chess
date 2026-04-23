@@ -45,6 +45,17 @@ public:
     bool hasPlayerWon() const;
     bool hasCPUWon() const;
 
+    void forEachTile(const auto &fn) const
+    {
+        for (int i{0}; i < Chess::RowSize; i++)
+        {
+            for (int j{0}; j < Chess::RowSize; j++)
+            {
+                fn(Tile{i, j});
+            }
+        }
+    }
+
 private:
     void setPieceType(const Tile &tile, PieceType pieceType);
 };
